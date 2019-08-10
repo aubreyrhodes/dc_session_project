@@ -1,0 +1,10 @@
+<!DOCTYPE html>
+<html>
+  <body>
+    <%= error_message %>
+    <form action="/login" method="POST">
+      <% include partials/login_fields.ejs %>
+      <button type="submit">Log In</button>
+    </form>
+  </body>
+</html>
