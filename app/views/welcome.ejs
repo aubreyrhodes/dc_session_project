@@ -1,7 +1,30 @@
 <!DOCTYPE html>
 <html>
-  <body>
-    <h1>Welcome, <%= email %> id: <%= user_id %></h1>
-    <a href="/signOut">Sign Out</a>
-  </body>
+
+<body>
+  <h1>Welcome, <%= email %> id: <%= user_id %></h1>
+  <a href="/signOut">Sign Out</a>
+
+  <form action="/messages" method="POST">
+    <label for="subject">Subject</label>
+    <input type="text" name="subject" />
+    <br />
+    <label for="body">Body</label>
+    <textarea name="body" rows="4" cols="30" placeholder="255 Character Limit"></textarea>
+    <br />
+    <button type="submit">Tweet</button>
+  </form>
+
+  <h1>Messages</h1>
+  <% messages.forEach(function(message) { %>
+  <div>
+    <span><%= message.subject %></span>
+    <br />
+    <span><%= message.body %></span>
+    <br />
+    <span>by: <%= message.user.email %></span>
+  </div><br />
+  <% }) %>
+</body>
+
 </html>
