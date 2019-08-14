@@ -70,18 +70,19 @@ app.get("/welcome", function (req, res, next) {
 
   var user_id = req.session.user_id;
 
-  db.user.findByPk(user_id).then(function (user) {
-    var email = user.email;
+  var user_promise = db.user.findByPk(user_id);
+  var message_promise = db.message.findAll({ include: [{ model: db.user }] });
 
-    db.message.
-      findAll({ include: [{ model: db.user }] }).
-      then(function (messages) {
-        res.render('welcome', {
-          email: email,
-          user_id: user_id,
-          messages: messages
-        });
-      });
+  Promise.all([user_promise, message_promise]).then(function(records){
+    var user = records[0];
+    var messages = records[1];
+
+    var email = user.email;
+    res.render('welcome', {
+      email: email,
+      user_id: user_id,
+      messages: messages
+    });
   })
 });
 
