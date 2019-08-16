@@ -11,9 +11,6 @@ var myStore = new SequelizeStore({
 });
 var app = express();
 
-
-
-
 //set the store to myStore where we connect the DB details
 app.use(session({
   secret: 'mySecret',
@@ -58,8 +55,9 @@ app.post("/signup", function (req, res, next) {
 
   var email = req.body.email;
   var password = req.body.password;
+  var firstName = req.body.firstName;
   bcrypt.hash(password, 10, function (err, hash) { // the hash allows the password to be private 
-    db.user.create({ email: email, password_hash: hash }).then(function (user) {  // creating new values in the database and saving it to the db
+    db.user.create({ email: email, password_hash: hash, firstName: firstName }).then(function (user) {  // creating new values in the database and saving it to the db
       req.session.user_id = user.id;
       res.redirect("/welcome");
     });
@@ -71,13 +69,13 @@ app.get("/welcome", function (req, res, next) {
   var user_id = req.session.user_id;
 
   db.user.findByPk(user_id).then(function (user) {
-    var email = user.email;
-
     db.message.
-      findAll({ include: [{ model: db.user }] }).
+      findAll({ include: 
+        [{ model: db.user },
+         { as: 'likedUsers', model: db.user }] }).
       then(function (messages) {
         res.render('welcome', {
-          email: email,
+          user: user,
           user_id: user_id,
           messages: messages
         });
@@ -133,6 +131,24 @@ app.post("/messages", function (req, res, next) {
       res.redirect("/welcome");
     });
 });
+
+app.get("/deleteMessage/:id", function(req, res, next){
+  var message = req.params.id;
+  var userID = req.session.user_id;
+
+  db.message.destroy({ where: {id: message, userId: userID}}).then(function(){
+    res.redirect("/welcome");
+  });
+});
+
+app.get("/likeMessage/:id", function(req, res, next){
+  var messageId = req.params.id;
+  var userId = req.session.user_id;
+
+  db.like.create({userId: userId, messageId: messageId}).then(function(){
+    res.redirect("/welcome");
+  });
+})
 
 app.listen(3000, function () {
   console.log("listening on port 3000...");

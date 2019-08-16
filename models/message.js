@@ -7,6 +7,7 @@ module.exports = (sequelize, DataTypes) => {
   }, {});
   message.associate = function (models) {
     message.belongsTo(models.user);
+    message.belongsToMany(models.user, {through: 'like', as: 'likedUsers'});
   };
   return message;
 };

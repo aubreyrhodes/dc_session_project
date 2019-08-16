@@ -5,6 +5,9 @@
     <!-- sign up section  -->
     <form action="/signup" method="POST">
         <% include partials/login_fields.ejs %>
+        <label for="firstName">First Name</label>
+        <input type="text" name="firstName" />
+        <br />
         <button type="submit">Sign Up</button>
     </form>
 </body>

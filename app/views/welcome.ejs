@@ -2,7 +2,7 @@
 <html>
 
 <body>
-  <h1>Welcome, <%= email %> id: <%= user_id %></h1>
+  <h1>Welcome, <%= user.firstName %> id: <%= user_id %></h1>
   <a href="/signOut">Sign Out</a>
 
   <form action="/messages" method="POST">
@@ -22,7 +22,15 @@
     <br />
     <span><%= message.body %></span>
     <br />
-    <span>by: <%= message.user.email %></span>
+    <span>by: <%= message.user.firstName %></span>
+    <br /> 
+    <span>Likes: <%= message.likedUsers.length %></span>
+    <br />
+    <% if(message.user.id === user_id){ %>
+          <a href="/deleteMessage/<%= message.id %>">Delete</a> |
+    <% } %> 
+    <a href="/likeMessage/<%= message.id %>">Like</a>
+
   </div><br />
   <% }) %>
 </body>
