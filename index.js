@@ -2,7 +2,7 @@ var express = require('express');
 var session = require('express-session');
 var db = require('./models');
 var bodyParser = require('body-parser');
-var bcrypt = require('bcrypt');
+var bcrypt = require('bcryptjs');
 //initialize connect-session-sequelize
 var SequelizeStore = require('connect-session-sequelize')(session.Store);
 //Connect sequelize session to our sequelize db
