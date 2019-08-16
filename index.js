@@ -133,11 +133,13 @@ app.post("/messages", function (req, res, next) {
 });
 
 app.get("/deleteMessage/:id", function(req, res, next){
-  var message = req.params.id;
-  var userID = req.session.user_id;
+  var messageId = req.params.id;
+  var userId = req.session.user_id;
 
-  db.message.destroy({ where: {id: message, userId: userID}}).then(function(){
-    res.redirect("/welcome");
+  db.like.destroy({where: { messageId: messageId }}).then(function(){
+    db.message.destroy({ where: {id: messageId, userId: userId}}).then(function(){
+      res.redirect("/welcome");
+    });
   });
 });
 
